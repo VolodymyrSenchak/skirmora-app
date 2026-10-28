@@ -332,6 +332,15 @@ As SA §11, plus:
 
 *Done when:* the dev page matches the gallery, and `sync:engine --check` passes.
 
+> **Done (2026-10-28).** `/dev` plays every animation of every race (anchor cross, projectile-origin dot, a projectiles row) and renders the 8 maps with 2/4-player zones through the battle's rasteriser; checked side by side with the gallery. `sync:engine --check` passes (29 files, pocket-legions-api@1cf8cd0, data 2026.11.0). Tests: the atlas check from §13 (every unit's animations and frames, heroes, projectiles) runs here already.
+> Differences from the plan:
+> - The config (angular.json, tsconfigs, .editorconfig, .prettierrc, vercel.json) is copied from sen-reveal-app instead of `ng new` — same generator output, same pinned `vitest 4.0.8`. `strict` and `strictTemplates` are on; the synced engine compiles under them.
+> - PWA by hand instead of `ng add @angular/pwa`: `@angular/service-worker`, `ngsw-config.json` (art cached lazily), manifest and an SVG icon. PNG icons stay in Phase 6.
+> - `sync:engine`: the header and `SOURCE.json` carry the last API commit that touched the synced set (`+dirty` with local edits), not `HEAD`, so unrelated API commits don't fail `--check`. `--check` runs as `prebuild`; with no API checkout next to the repo (a Vercel build) it warns and passes, building the committed copy.
+> - `sync:art` copies `design/art/atlas/*.{json,webp}` to `public/art/atlas/` and the copy is committed (`design/` is not a repo, Vercel needs the files). It has a `--check` too.
+> - Maps are rasterised once, so the gallery's water, lava and mill-blade animations are still frames. Map previews elsewhere can use `mapSvg()` directly.
+> - Pixi's web-worker adapter pulls in CommonJS `@xmldom/xmldom`; it is whitelisted in `allowedCommonJsDependencies`. Pixi lives only in lazy chunks (initial bundle 252 kB raw).
+
 **Phase 1 — Hot-seat battle (first playable).**
 - `LocalTransport` with fixed test armies.
 - Battle screen: `PixiBattleRenderer`, `EventAnimator`, battle input, HUD.

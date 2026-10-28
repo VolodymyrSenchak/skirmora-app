@@ -1,0 +1,17 @@
+{
+  "id": "/",
+  "name": "Pocket Legions",
+  "short_name": "Legions",
+  "description": "Покрокова тактика на 2–4 гравців: онлайн або на одному телефоні.",
+  "lang": "uk",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#141922",
+  "theme_color": "#141922",
+  "categories": ["games"],
+  "icons": [
+    { "src": "icon.svg", "type": "image/svg+xml", "sizes": "any", "purpose": "any" }
+  ]
+}

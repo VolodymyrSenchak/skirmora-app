@@ -1,0 +1,58 @@
+/* Tokens from the gallery's :root (design/art/index.html), "war table" theme. Dark only (plan §11). */
+:root {
+  /* surfaces, back to front */
+  --bg: #141922;
+  --cloth: #1c2230;
+  --panel: #222a3a;
+  --panel-2: #2a3446;
+  --line: #36425a;
+
+  /* ink */
+  --fg: #ece5d4;
+  --muted: #a7adbb;
+  --faint: #7d8597;
+
+  /* accents */
+  --brass: #d9a64b;
+  --brass-dim: #8a6a33;
+  --danger: #e2574c;
+  --ok: #5fbf7a;
+
+  /* seat colours (maps-render PLAYER) */
+  --p1: #d9534a;
+  --p2: #3f7fd8;
+  --p3: #e0b43c;
+  --p4: #46a86a;
+
+  /* race colours (design/data/gamedata.js colors.main) */
+  --race-knights: #2f5fb3;
+  --race-vampires: #8e1b2e;
+  --race-barbarians: #a3542a;
+  --race-elves: #2f8a4a;
+  --race-dwarves: #b0652a;
+  --race-demons: #c0392b;
+
+  /* type */
+  --font-display: 'Alegreya SC', 'Georgia', serif;
+  --font-body: 'Golos Text', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'Consolas', monospace;
+
+  /* radii */
+  --r-card: 12px;
+  --r-field: 10px;
+  --r-chip: 6px;
+  --r-pill: 999px;
+
+  /* touch */
+  --tap: 44px;
+  --tap-primary: 56px;
+
+  /* layout */
+  --shell: 560px;
+  --gutter: 16px;
+
+  /* motion: the battle is the only heavy animation */
+  --t-quick: 120ms;
+
+  color-scheme: dark;
+}

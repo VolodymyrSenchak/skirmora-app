@@ -1,0 +1,29 @@
+{
+  "frameSize": 224,
+  "nominalSize": 128,
+  "anchor": {
+    "x": 0.5,
+    "y": 0.777
+  },
+  "races": {
+    "knights": [
+      "knights.json"
+    ],
+    "vampires": [
+      "vampires.json"
+    ],
+    "barbarians": [
+      "barbarians.json"
+    ],
+    "elves": [
+      "elves.json"
+    ],
+    "dwarves": [
+      "dwarves.json"
+    ],
+    "demons": [
+      "demons.json"
+    ]
+  },
+  "projectiles": "projectiles.json"
+}

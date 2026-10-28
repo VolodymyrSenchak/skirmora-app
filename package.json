@@ -1,0 +1,40 @@
+{
+  "name": "pocket-legions-app",
+  "version": "0.0.0",
+  "scripts": {
+    "ng": "ng",
+    "start": "ng serve",
+    "prebuild": "node scripts/sync-engine.mjs --check",
+    "build": "ng build",
+    "watch": "ng build --watch --configuration development",
+    "test": "ng test",
+    "test:run": "ng test --watch=false",
+    "sync:engine": "node scripts/sync-engine.mjs",
+    "sync:art": "node scripts/sync-art.mjs"
+  },
+  "private": true,
+  "packageManager": "npm@11.4.2",
+  "dependencies": {
+    "@angular/common": "^22.0.0",
+    "@angular/compiler": "^22.0.0",
+    "@angular/core": "^22.0.0",
+    "@angular/forms": "^22.0.0",
+    "@angular/platform-browser": "^22.0.0",
+    "@angular/router": "^22.0.0",
+    "@angular/service-worker": "^22.0.0",
+    "pixi.js": "^8.6.0",
+    "rxjs": "~7.8.0",
+    "socket.io-client": "^4.8.3",
+    "tslib": "^2.3.0",
+    "zod": "^4.6.4"
+  },
+  "devDependencies": {
+    "@angular/build": "^22.0.6",
+    "@angular/cli": "^22.0.6",
+    "@angular/compiler-cli": "^22.0.0",
+    "jsdom": "^28.0.0",
+    "prettier": "^3.8.1",
+    "typescript": "~6.0.2",
+    "vitest": "4.0.8"
+  }
+}

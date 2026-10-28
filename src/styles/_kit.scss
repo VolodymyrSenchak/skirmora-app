@@ -1,0 +1,148 @@
+/* Shared primitives. Components add layout, never colours of their own. */
+
+.shell {
+  max-width: var(--shell);
+  margin: 0 auto;
+  padding: 16px var(--gutter) 32px;
+  display: grid;
+  gap: 16px;
+}
+
+.eyebrow {
+  font: 600 12px/1 var(--font-mono);
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--brass);
+}
+
+.btn {
+  min-height: var(--tap);
+  padding: 0 16px;
+  border-radius: var(--r-field);
+  border: 1px solid var(--line);
+  background: var(--cloth);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-weight: 600;
+  text-decoration: none;
+  color: var(--fg);
+  transition:
+    background var(--t-quick),
+    border-color var(--t-quick);
+
+  &:hover:not(:disabled) {
+    border-color: var(--brass-dim);
+  }
+
+  &:disabled {
+    opacity: 0.45;
+    cursor: default;
+  }
+
+  &.primary {
+    min-height: var(--tap-primary);
+    background: var(--brass);
+    border-color: var(--brass);
+    color: #1a1408;
+    font-family: var(--font-display);
+    font-size: 19px;
+
+    &:hover:not(:disabled) {
+      background: #e6b65c;
+    }
+  }
+
+  &.danger {
+    border-color: color-mix(in srgb, var(--danger) 60%, var(--line));
+    color: var(--danger);
+  }
+
+  &.ghost {
+    background: transparent;
+  }
+
+  &.small {
+    min-height: 34px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+}
+
+.seg {
+  background: var(--cloth);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 6px 12px;
+  min-height: 36px;
+  font-size: 14px;
+
+  &[aria-pressed='true'] {
+    border-color: var(--brass);
+    color: var(--brass);
+  }
+}
+
+.segs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: var(--r-card);
+  padding: 12px;
+}
+
+.field {
+  display: grid;
+  gap: 6px;
+
+  label,
+  .label {
+    font: 600 11px/1.2 var(--font-mono);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brass);
+  }
+
+  input,
+  select {
+    min-height: var(--tap);
+    padding: 0 12px;
+    border-radius: var(--r-field);
+    border: 1px solid var(--line);
+    background: var(--cloth);
+  }
+
+  .error {
+    color: var(--danger);
+    font-size: 13px;
+  }
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 3px 8px;
+  border-radius: var(--r-chip);
+  background: var(--panel-2);
+  font-size: 13px;
+}
+
+.seat-dot {
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  display: inline-block;
+  flex: none;
+}
+
+.error-text {
+  color: var(--danger);
+  font-size: 14px;
+}
