@@ -395,7 +395,7 @@ As SA §11, plus:
 > **Done (2026-10-28), locally.** Army, deploy and battle screens run unchanged over the network. On Arena, Анна (`localhost:4200`, socket), Богдан (`127.0.0.1:4200`, socket) and a third player as a Node script on HTTP polling only played a full FFA battle to "Переміг Богдан": no action was rejected on any side, and the polling player checked every `/state` payload before the battle — none carried another army (only `mine.army`). The browsers drove their turns from `hints` through `window.__battle`. `claimTimeout`: in a 2-player room with 30 s turns a passive opponent timed out and the waiting browser claimed it by itself (`timedOut` → `defended` → `turnStarted`). Reconnect: a gap in `seq` skips straight to the state (animator test); the `outdated` code ends the session on the dead-end screen with a reload.
 > Differences from the plan:
 > - The run was against `npm run api:memory` (the API's own build with an in-memory store), not the deployed API, and the third player was a script rather than a third browser profile; the polling side is therefore the server's polling contract, not the client's fallback switch (that one is covered by the manager tests). The run on three real phones belongs to Phase 6.
-> - The deployed API still refuses `http://localhost:4200` (not in its `CORS_ORIGINS`); the production build points at `https://pocket-legions-api.vercel.app`, so the deployed client's origin has to be added there.
+> - The deployed API still refuses `http://localhost:4200` (not in its `CORS_ORIGINS`); the production build points at `https://skirmora-api.vercel.app`, so the deployed client's origin has to be added there.
 > - TODO (open, API plan §13): a timer before the battle; the deploy screen has none.
 
 **Phase 6 — Ship.**
