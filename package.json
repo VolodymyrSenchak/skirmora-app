@@ -10,7 +10,8 @@
     "test": "ng test",
     "test:run": "ng test --watch=false",
     "sync:engine": "node scripts/sync-engine.mjs",
-    "sync:art": "node scripts/sync-art.mjs"
+    "sync:art": "node scripts/sync-art.mjs",
+    "api:memory": "node scripts/memory-api.mjs"
   },
   "private": true,
   "packageManager": "npm@11.4.2",

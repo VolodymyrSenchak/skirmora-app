@@ -28,6 +28,9 @@ import { SeatsBar } from '../seats-bar';
 /**
  * Deploy phase (plan §7): the map with your zone, tap a stack then a cell (or a placed stack to
  * pick it up again), ready. Nobody else's stacks are on this map — the view has none.
+ *
+ * TODO(open question, API plan §13): a timer before the battle (the design says 60 s for
+ * deployment; the API has none). No countdown here until the owner decides.
  */
 @Component({
   selector: 'app-deploy-view',

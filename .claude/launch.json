@@ -4,7 +4,14 @@
     {
       "name": "app",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["ng", "serve", "--port", "4200"],
+      "runtimeArgs": [
+        "ng",
+        "serve",
+        "--host",
+        "127.0.0.1",
+        "--port",
+        "4200"
+      ],
       "port": 4200
     }
   ]

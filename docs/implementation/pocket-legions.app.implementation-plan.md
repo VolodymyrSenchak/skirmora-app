@@ -373,14 +373,30 @@ As SA §11, plus:
 **Phase 3 — Getting in (online).** Home, create (map picker with previews), join, identity — mostly copied from sen-reveal-app.
 *Done when:* create and join return tokens, and every error has a place on screen.
 
+> **Done (2026-10-28).** Home ("Грати онлайн", "Приєднатися за кодом", "Один телефон", continue a saved hot-seat game), `/create` (name, the shared room-settings form with live map previews, budget, mode, turn time, room size, optional password; the last settings are remembered), `/join` (six digit boxes, `?code=` prefill and paste, `/info` lookup showing map · mode · budget · players, the password field only for locked rooms), identity per code and the token interceptor copied from SA. Errors: `nickname-taken` under the name, `unauthorized` under the password, `not-found` / `gone` / `session-full` / `session-finished` / `session-started` under the code, anything else as a line above the button. Checked in the browser against the API: create → `/s/:code`, a duplicate name, then a join, a wrong code, and a code of a started game.
+> Differences from the plan:
+> - Plain signals instead of signal forms for the two forms (one required field each).
+> - `npm run api:memory` (`scripts/memory-api.mjs`) runs the API's committed build in this process with `InMemorySessionRepository` + `InMemoryBus`: online play on localhost with no Supabase writes and CORS set for `http://localhost:4200` (override with `CORS_ORIGINS`). The dev server binds `127.0.0.1` (launch config), so a second player can use `http://127.0.0.1:4200` with its own localStorage.
+
 **Phase 4 — Lobby and transports.** Copy the transports, manager, connection banner and lobby. Add settings display, 2v2 team setting and start.
 *Done when:* SA Phase 2–3 criteria pass against pocket-legions-api.
+
+> **Done (2026-10-28).** Socket, polling and the transport manager are SA's, with `GameSession` from the synced types; `TransportManager` implements `SessionConnection`. The connection banner, the dead-end screen (adds `outdated` with a reload) and `/s/:code` (no identity → `/join?code=`) are copied and translated. Lobby: the code with share/copy, players with presence dots, host transfer and kick, the settings summary with the map preview, the host's settings edit (`lobby.updateSettings`, errors under the form, `maxPlayers` not below the players in), and start, enabled by the same start check the engine runs. Checked against the API with two browser origins and a polling bot: joins appear live on the host's screen, a settings change reaches the other player, start moves everyone to the army screen. Tests: SA's 9 transport-manager tests pass on the copy.
+> Differences from the plan:
+> - The 2 vs 2 team assignment is in the army phase (`pocket-legions.setTeam` is an army-phase action in the API), on the seats bar for the host — not in the lobby.
+> - TODO (open, API plan §13): which room rules the host may change; the form offers every create setting, as the API accepts today.
 
 **Phase 5 — Online game.**
 - Army, deploy and battle over the network, with `claimTimeout`.
 - Reconnect mid-battle: gap → hard sync. The `outdated` flow.
 
 *Done when:* three browsers play a full FFA battle, one of them on polling, and no payload before `battle` contains another player's army (check the network tab).
+
+> **Done (2026-10-28), locally.** Army, deploy and battle screens run unchanged over the network. On Arena, Анна (`localhost:4200`, socket), Богдан (`127.0.0.1:4200`, socket) and a third player as a Node script on HTTP polling only played a full FFA battle to "Переміг Богдан": no action was rejected on any side, and the polling player checked every `/state` payload before the battle — none carried another army (only `mine.army`). The browsers drove their turns from `hints` through `window.__battle`. `claimTimeout`: in a 2-player room with 30 s turns a passive opponent timed out and the waiting browser claimed it by itself (`timedOut` → `defended` → `turnStarted`). Reconnect: a gap in `seq` skips straight to the state (animator test); the `outdated` code ends the session on the dead-end screen with a reload.
+> Differences from the plan:
+> - The run was against `npm run api:memory` (the API's own build with an in-memory store), not the deployed API, and the third player was a script rather than a third browser profile; the polling side is therefore the server's polling contract, not the client's fallback switch (that one is covered by the manager tests). The run on three real phones belongs to Phase 6.
+> - The deployed API still refuses `http://localhost:4200` (not in its `CORS_ORIGINS`); the production build points at `https://pocket-legions-api.vercel.app`, so the deployed client's origin has to be added there.
+> - TODO (open, API plan §13): a timer before the battle; the deploy screen has none.
 
 **Phase 6 — Ship.**
 - A11y: labels on action buttons, `aria-live` for the event log, focus order in the shop.

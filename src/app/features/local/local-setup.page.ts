@@ -1,12 +1,11 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { MAPS } from '../../engine/engine/data/maps';
-import { BUDGETS, startProblem } from '../../engine/game/pocketLegions.state';
-import { DATA_VERSION } from '../../engine/engine/version';
+import { startProblemText } from '../../core/start-check';
+import { BUDGETS } from '../../engine/game/pocketLegions.state';
 import type { GameMode, MapId } from '../../models';
 import { LocalTransport } from '../../session/local.transport';
 import { seatColor } from '../../ui/colors';
-import { MapPreview } from '../../ui/map-preview';
+import { MapPicker } from '../../ui/map-picker';
 
 const NAMES_KEY = 'pocket-legions:local-names';
 const MAX_NAME = 20;
@@ -15,7 +14,7 @@ const MAX_NAME = 20;
 @Component({
   selector: 'app-local-setup-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [MapPreview, RouterLink],
+  imports: [MapPicker, RouterLink],
   template: `
     <main class="shell setup">
       <header>
@@ -48,16 +47,7 @@ const MAX_NAME = 20;
 
       <section class="field" aria-labelledby="map-h">
         <span class="label" id="map-h">Карта</span>
-        <div class="maps">
-          @for (m of maps; track m.id) {
-            <button class="map card" type="button" [attr.aria-pressed]="m.id === mapId()" (click)="mapId.set(m.id)">
-              <app-map-preview [mapId]="m.id" [players]="names().length" [mode]="mode()" />
-              <span class="map-name">{{ m.name }}</span>
-              <span class="mono muted small">{{ m.size }}×{{ m.size }} · {{ m.players }}</span>
-            </button>
-          }
-        </div>
-        <p class="muted small">{{ mapDesc() }}</p>
+        <app-map-picker [(mapId)]="mapId" [players]="names().length" [mode]="mode()" />
       </section>
 
       <section class="field">
@@ -107,16 +97,11 @@ const MAX_NAME = 20;
     .name-row input {
       flex: 1; min-height: var(--tap); padding: 0 12px; border-radius: var(--r-field); border: 1px solid var(--line); background: var(--cloth);
     }
-    .maps { display: grid; grid-template-columns: repeat(auto-fill, minmax(118px, 1fr)); gap: 8px; }
-    .map { display: grid; gap: 4px; padding: 6px; text-align: left; }
-    .map[aria-pressed='true'] { border-color: var(--brass); box-shadow: 0 0 0 1px var(--brass); }
-    .map-name { font: 700 14px/1.1 var(--font-display); }
   `,
 })
 export class LocalSetupPage {
   private readonly router = inject(Router);
 
-  protected readonly maps = MAPS;
   protected readonly budgets = BUDGETS;
   protected readonly turnOptions = [30, 45, 60, 90];
   protected readonly maxName = MAX_NAME;
@@ -129,26 +114,13 @@ export class LocalSetupPage {
   protected readonly timer = signal(false);
   protected readonly turnSeconds = signal(45);
 
-  protected readonly mapDesc = computed(() => MAPS.find((map) => map.id === this.mapId())?.desc ?? '');
-
   /** The engine's own start check (what the server's `lobby.start` runs), plus names. */
   protected readonly problem = computed(() => {
     const names = this.names().map((name) => name.trim());
     if (names.some((name) => !name)) return 'Кожному гравцю потрібне ім’я.';
     if (new Set(names).size !== names.length) return 'Імена мають бути різні.';
-    const problem = startProblem(
-      { mapId: this.mapId(), budget: this.budget(), mode: this.mode(), turnSeconds: this.turnSeconds(), dataVersion: DATA_VERSION },
-      names.length,
-    );
-    if (!problem) return null;
-    if (this.mode() === 'teams') return this.mapTeams() ? '2 на 2 — рівно 4 гравці.' : 'На цій карті немає режиму 2 на 2.';
-    const [min, max] = MAPS.find((map) => map.id === this.mapId())!.ffaPlayers;
-    return `Ця карта для ${min === max ? min : `${min}–${max}`} гравців.`;
+    return startProblemText({ mapId: this.mapId(), budget: this.budget(), mode: this.mode(), turnSeconds: this.turnSeconds() }, names.length);
   });
-
-  private mapTeams(): boolean {
-    return MAPS.find((map) => map.id === this.mapId())?.teams ?? false;
-  }
 
   protected color(seat: number): string {
     return seatColor(seat);

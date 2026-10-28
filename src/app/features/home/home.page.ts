@@ -15,10 +15,12 @@ import { LocalTransport } from '../../session/local.transport';
         <p class="muted">Шість рас, герої зі спорядженням і бої на картах від 10×10 до 20×20.</p>
       </header>
       <nav class="actions">
+        <a class="btn primary" routerLink="/create">Грати онлайн</a>
+        <a class="btn" routerLink="/join">Приєднатися за кодом</a>
         @if (hasLocal) {
-          <a class="btn primary" routerLink="/local/game">Продовжити гру на одному телефоні</a>
+          <a class="btn" routerLink="/local/game">Продовжити гру на одному телефоні</a>
         }
-        <a class="btn" [class.primary]="!hasLocal" routerLink="/local">Один телефон</a>
+        <a class="btn" routerLink="/local">Один телефон</a>
       </nav>
     </main>
   `,

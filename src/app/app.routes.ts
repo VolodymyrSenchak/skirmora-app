@@ -6,6 +6,20 @@ export const routes: Routes = [
     loadComponent: () => import('./features/home/home.page').then((m) => m.HomePage),
   },
   {
+    path: 'create',
+    loadComponent: () => import('./features/create/create-session.page').then((m) => m.CreateSessionPage),
+  },
+  {
+    path: 'join',
+    loadComponent: () => import('./features/join/join-session.page').then((m) => m.JoinSessionPage),
+  },
+  {
+    // One route for the whole session: state arrives by push, a route per phase would turn every
+    // snapshot into a navigation (SA §7).
+    path: 's/:code',
+    loadComponent: () => import('./features/session/session.page').then((m) => m.SessionPage),
+  },
+  {
     path: 'local',
     loadComponent: () => import('./features/local/local-setup.page').then((m) => m.LocalSetupPage),
   },

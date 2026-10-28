@@ -75,3 +75,7 @@ export type TerminalReason =
   | 'not-found'
   | 'finished'
   | 'outdated';
+
+/** The API's limits (models/session.schemas.ts there). */
+export const NICKNAME_MAX_LENGTH = 20;
+export const PASSWORD_MAX_LENGTH = 64;
