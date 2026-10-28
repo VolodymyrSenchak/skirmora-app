@@ -97,7 +97,10 @@ export class AtlasLoader {
     const index = await this.index();
     const pages = index.races[raceId];
     if (!pages?.length) throw new Error(`No atlas for race ${raceId}`);
-    const sheets = await Promise.all(pages.map((page) => Assets.load<Spritesheet>(this.base + page)));
+    // every race has `hero/idle/0`…: a prefix keeps their frames apart in the global texture cache
+    const sheets = await Promise.all(
+      pages.map((page) => Assets.load<Spritesheet>({ src: this.base + page, data: { cachePrefix: `${raceId}:` } })),
+    );
     const animations: Record<string, Texture[]> = {};
     const metas: RaceArtMeta[] = [];
     for (const sheet of sheets) {

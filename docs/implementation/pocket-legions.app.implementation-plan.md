@@ -347,6 +347,18 @@ As SA §11, plus:
 
 *Done when:* two people finish a battle on one phone, and every action available in the UI is one the engine accepts (hints only).
 
+> **Done (2026-10-28).** `/local/game` starts a quick battle (two seats, ready-made armies, automatic deployment) through the real actions, so the engine checks the armies and placements. The battle screen has the Pixi scene with move/attack/shot/death animations, projectiles from the atlas, damage numbers and count badges, and a HUD with round, turn order, the selected stack's card, preview, action bar (Оборона · Здібність · Герой · Підтвердити · Рукопашна), the last 5 events, a menu with speed 1×/2× and surrender. The result shows over the field after the last animation, with rematch and leave. Checked in the browser: tap-to-move, select-then-shoot with a second tap, and a whole battle driven from `hints` to the result with no rejected action and no console error. Tests: a full 2-seat battle through `LocalTransport` from hints with a seeded rng, the handover order, the reload resume, the animator (order, gap, hidden tab, input lock, log lag), battle input (hint-only selection, no one-tap attack, the `from` cell, hero two-target flow), the screen table.
+> Differences from the plan:
+> - `BattleRenderer.highlight(groups)` takes every highlight group at once (`move`, `attack`, `shoot`, `ability`, `from`, `chosen`, `selected`, `actable`, `zone`) instead of one `(cells, kind)` call; `mount` takes the sides (seat → race) besides the map, and `setStacks` takes the walls too.
+> - The screens talk to an abstract `SessionConnection` (dispatch, connection, terminal, `handover`, `local`); `LocalSession` and, later, the `TransportManager` implement it. `SessionScreens` is the phase switch shared by `/local/game` and `/s/:code`.
+> - A finished battle stays on the battle screen (`pickScreen` returns `battle` in phase `over` when there is a battle), so the last events animate before the result appears over the field. The standalone `over` screen is for a game that ended before any battle.
+> - Attacks resolve on `hitFrame` and shots on impact, so the following `damaged` event plays the target's `hit` and the number at the right moment without pairing events.
+> - The handover curtain appears only before army and deploy screens. The battle is public (gear included), so in hot-seat the view simply follows the active seat with a "Гравець N, ваш хід" line.
+> - Hot-seat acts as the host for `rematch` and `setTeam` (everyone holds the same phone).
+> - Atlases load with a per-race `cachePrefix`: every race has `hero/idle/0`…, which clashed in Pixi's global texture cache.
+> - In dev builds the battle component is reachable as `window.__battle`, so a console script can drive a battle from the hints (this is how the end-to-end check ran).
+> - The reduced-motion (instant) mode is in the renderer (`setInstant`); there is no unit test for it yet, only the code path.
+
 **Phase 2 — Army and deploy (hot-seat).** Race picker, unit shop, gear slots, budget bar, deploy screen, handover curtain, local setup page.
 *Done when:* a 3-player hot-seat game runs from setup to result without anyone seeing another player's army.
 
