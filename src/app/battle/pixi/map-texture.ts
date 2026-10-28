@@ -185,6 +185,8 @@ export interface MapSvgOptions {
   /** px per cell in the SVG's coordinate system. */
   cell?: number;
   zones?: readonly MapZone[];
+  /** Scale to the container's width instead of a fixed pixel size (inline previews). */
+  fluid?: boolean;
 }
 
 /** The map as an SVG string (maps-render.js `renderMap`, over the engine's `BuiltMap`). */
@@ -194,7 +196,8 @@ export function mapSvg(map: BuiltMap, options: MapSvgOptions = {}): string {
     S = n * C;
   const theme = map.def.theme;
   const [g1, g2] = THEMES[theme] ?? THEMES['grass'];
-  let s = `<svg class="map" viewBox="0 0 ${S} ${S}" width="${S}" height="${S}" xmlns="http://www.w3.org/2000/svg"><rect width="${S}" height="${S}" fill="${g1}"/>`;
+  const size = options.fluid ? 'width="100%" style="display:block;height:auto"' : `width="${S}" height="${S}"`;
+  let s = `<svg class="map" viewBox="0 0 ${S} ${S}" ${size} xmlns="http://www.w3.org/2000/svg"><rect width="${S}" height="${S}" fill="${g1}"/>`;
   for (let x = 0; x < n; x++)
     for (let y = 0; y < n; y++) if ((x + y) % 2) s += `<rect x="${x * C}" y="${y * C}" width="${C}" height="${C}" fill="${g2}"/>`;
   // water under the bridges

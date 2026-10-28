@@ -1,0 +1,201 @@
+<main class="army" [style.--seat]="myColor()">
+  <header class="head">
+    <div>
+      <span class="eyebrow">Збір армії</span>
+      <h1>{{ store.me()?.nickname }}</h1>
+    </div>
+    <app-seats-bar phase="army" />
+  </header>
+
+  @if (ready()) {
+    <section class="card waiting" aria-live="polite">
+      <h2>Армію зібрано</h2>
+      <p class="muted">
+        {{ race()?.name }} · {{ draft.spent() }} з {{ draft.budget() }} балів. Чекаємо, поки інші гравці зберуть армії.
+      </p>
+      <button class="btn" type="button" (click)="unready()" [disabled]="busy()">Змінити армію</button>
+    </section>
+  } @else if (!race() || choosingRace()) {
+    <section aria-labelledby="race-h" class="races-section">
+      <h2 id="race-h">Оберіть расу</h2>
+      <div class="races">
+        @for (r of races; track r.id) {
+          <button
+            class="race card"
+            type="button"
+            [style.--race]="raceColors[r.id]"
+            [attr.aria-pressed]="r.id === raceId()"
+            (click)="pickRace(r.id)"
+            [disabled]="busy()"
+          >
+            <app-unit-portrait class="hero-art" [raceId]="r.id" unitId="hero" [label]="r.hero.name" />
+            <span class="race-text">
+              <strong class="race-name">{{ r.name }}</strong>
+              <span class="muted small">{{ r.fullName }}</span>
+              <span class="small"><b>{{ r.trait.name }}.</b> {{ r.trait.desc }}</span>
+              <span class="small"><b>{{ r.hero.name }}</b> — {{ r.hero.ability.name }}: {{ r.hero.ability.desc }}</span>
+            </span>
+          </button>
+        }
+      </div>
+      @if (serverError()) {
+        <p class="error-text" role="alert">{{ serverError() }}</p>
+      }
+    </section>
+  } @else {
+    <section class="race-bar" [style.--race]="raceColors[raceId()!]">
+      <strong>{{ race()!.name }}</strong>
+      <span class="muted small">{{ race()!.trait.name }}</span>
+      <button class="btn small ghost" type="button" (click)="choosingRace.set(true)">Інша раса</button>
+    </section>
+
+    <section class="budget card" aria-label="Бюджет">
+      <div class="bar" role="img" [attr.aria-label]="'Витрачено ' + draft.spent() + ' з ' + draft.budget()">
+        <span class="seg-units" [style.width.%]="unitPct()"></span>
+        <span class="seg-gear" [style.width.%]="gearPct()"></span>
+        <span class="cap" [style.left.%]="capPct()" title="Межа спорядження 30%"></span>
+      </div>
+      <div class="budget-text mono">
+        <span>Війська <b>{{ draft.points().unitPoints }}</b></span>
+        <span [class.over]="draft.points().gearPoints > draft.gearCap()">Спорядження <b>{{ draft.points().gearPoints }}</b>/{{ draft.gearCap() }}</span>
+        <span [class.over]="draft.remaining() < 0">Залишок <b>{{ draft.remaining() }}</b></span>
+      </div>
+      <div class="budget-text small muted">
+        <span>Загонів {{ draft.stacks().length }}/{{ draft.maxStacks() }}</span>
+        <span>Чемпіонів {{ draft.champions() }}/{{ draft.maxChampions() }}</span>
+      </div>
+      @if (serverError(); as e) {
+        <p class="error-text" role="alert">{{ e }}</p>
+      } @else if (problemText() && draft.stacks().length) {
+        <p class="error-text">{{ problemText() }}</p>
+      }
+    </section>
+
+    <section class="mine" aria-labelledby="mine-h">
+      <h2 id="mine-h">Ваша армія</h2>
+      @if (!draft.stacks().length) {
+        <p class="muted">Додайте загони з магазину нижче.</p>
+      }
+      <ol class="stacks">
+        @for (stack of draft.stacks(); track $index; let i = $index) {
+          <li class="stack card">
+            <app-unit-portrait class="mini" [raceId]="raceId()!" [unitId]="stack.unitId" [px]="96" />
+            <div class="stack-main">
+              <strong>{{ unit(stack.unitId).name }}</strong>
+              <span class="muted small mono">{{ unit(stack.unitId).cost }} × {{ stack.count }} = {{ unit(stack.unitId).cost * stack.count }}</span>
+            </div>
+            <div class="stepper">
+              <button class="btn small" type="button" (click)="step(i, -1)" [attr.aria-label]="'Менше ' + unit(stack.unitId).name">−</button>
+              <input
+                class="mono"
+                type="number"
+                inputmode="numeric"
+                min="1"
+                [value]="stack.count"
+                (change)="setCount(i, $event)"
+                [attr.aria-label]="'Кількість ' + unit(stack.unitId).name"
+              />
+              <button class="btn small" type="button" (click)="step(i, 1)" [attr.aria-label]="'Більше ' + unit(stack.unitId).name">+</button>
+              <button class="btn small ghost" type="button" (click)="max(i)">макс</button>
+              <button class="btn small ghost" type="button" (click)="remove(i)" [attr.aria-label]="'Прибрати ' + unit(stack.unitId).name">✕</button>
+            </div>
+          </li>
+        }
+      </ol>
+    </section>
+
+    <div class="tabs segs" role="tablist">
+      <button class="seg" type="button" role="tab" [attr.aria-selected]="tab() === 'units'" [attr.aria-pressed]="tab() === 'units'" (click)="tab.set('units')">Війська</button>
+      <button class="seg" type="button" role="tab" [attr.aria-selected]="tab() === 'hero'" [attr.aria-pressed]="tab() === 'hero'" (click)="tab.set('hero')">Герой і спорядження</button>
+    </div>
+
+    @if (tab() === 'units') {
+      <section class="shop" aria-label="Магазин військ">
+        @for (u of draft.units(); track u.id) {
+          <article class="unit card">
+            <div class="stage">
+              <app-unit-portrait [raceId]="raceId()!" [unitId]="u.id" [label]="u.name" />
+              <span class="tier mono">T{{ u.tier }}</span>
+              <span class="cost mono">{{ u.cost }}</span>
+            </div>
+            <h3>{{ u.name }}</h3>
+            <div class="stats mono">
+              <div><b>{{ u.atk }}</b><i>атк</i></div>
+              <div><b>{{ u.def }}</b><i>зах</i></div>
+              <div><b>{{ dmg(u) }}</b><i>шкода</i></div>
+              <div><b>{{ u.hp }}</b><i>HP</i></div>
+              <div><b>{{ u.spd }}</b><i>швид</i></div>
+            </div>
+            <div class="tags">
+              @if (u.fly) {
+                <span class="tag kind">літає</span>
+              }
+              @if (u.ranged) {
+                <span class="tag kind">стріляє {{ u.ranged.range }} · {{ u.ranged.shots }} постр.</span>
+              }
+              @for (a of abilityTags(u); track a.name) {
+                <span class="tag" [title]="a.desc">{{ a.name }}</span>
+              }
+            </div>
+            <button class="btn small" type="button" (click)="add(u.id)" [disabled]="!draft.canAdd(u.id)">
+              + Загін{{ draft.stacksOf(u.id) ? ' (' + draft.stacksOf(u.id) + '/2)' : '' }}
+            </button>
+          </article>
+        }
+      </section>
+    } @else {
+      <section class="hero card" aria-labelledby="hero-h">
+        <div class="hero-head">
+          <app-unit-portrait class="mini" [raceId]="raceId()!" unitId="hero" [px]="96" />
+          <div>
+            <h2 id="hero-h">{{ race()!.hero.name }}</h2>
+            <p class="small"><b>{{ race()!.hero.ability.name }}:</b> {{ race()!.hero.ability.desc }}</p>
+            <p class="small muted mono">
+              атк +{{ race()!.hero.atk }} · зах +{{ race()!.hero.def }} · удача {{ race()!.hero.luck }} · мораль {{ race()!.hero.morale }}
+            </p>
+          </div>
+        </div>
+        <ul class="slots">
+          @for (slot of slots(); track slot.key) {
+            <li>
+              <button class="slot" type="button" (click)="toggleSlot(slot.key)" [attr.aria-expanded]="openSlot() === slot.key">
+                <span class="slot-name">{{ slot.name }}</span>
+                <span>{{ item(slot.itemId)?.name ?? '—' }}</span>
+                @if (slot.itemId) {
+                  <span class="mono muted">{{ draft.itemCost(slot.itemId) }}</span>
+                }
+              </button>
+              @if (openSlot() === slot.key) {
+                <ul class="items">
+                  @for (it of draft.itemsFor(slot.slot); track it.id) {
+                    <li>
+                      <button
+                        class="item"
+                        type="button"
+                        [attr.aria-pressed]="it.id === slot.itemId"
+                        [disabled]="!draft.fitsCap(it.id, slot.itemId)"
+                        (click)="choose(slot.key, it.id)"
+                      >
+                        <span><b>{{ it.name }}</b> <span class="muted small">{{ itemEffect(it) }}</span></span>
+                        <span class="mono">{{ draft.itemCost(it.id) }}</span>
+                      </button>
+                    </li>
+                  }
+                  @if (slot.itemId) {
+                    <li><button class="item" type="button" (click)="choose(slot.key, null)">Зняти</button></li>
+                  }
+                </ul>
+              }
+            </li>
+          }
+        </ul>
+      </section>
+    }
+
+    <div class="submit">
+      <button class="btn primary" type="button" (click)="submit()" [disabled]="busy() || !!draft.problem()">
+        Готово — {{ draft.spent() }}/{{ draft.budget() }}
+      </button>
+    </div>
+  }
+</main>

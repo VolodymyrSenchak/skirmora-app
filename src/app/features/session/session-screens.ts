@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, computed, inject, output } from '@angular/core';
 import { SessionConnection } from '../../session/session-connection';
 import { SessionStore } from '../../session/session.store';
+import { ArmyView } from './army/army.view';
 import { BattleView } from './battle/battle.view';
+import { DeployView } from './deploy/deploy.view';
 import { HandoverView } from './handover/handover.view';
 import { ResultPanel } from './over/result.panel';
 import { PocketLegions } from '../../session/actions';
@@ -14,7 +16,7 @@ import { pickScreen } from './screen';
 @Component({
   selector: 'app-session-screens',
   changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [BattleView, HandoverView, ResultPanel],
+  imports: [ArmyView, BattleView, DeployView, HandoverView, ResultPanel],
   template: `
     @if (store.outdated()) {
       <p class="outdated" role="alert">Гру оновлено — перезавантажте сторінку.</p>
@@ -25,6 +27,12 @@ import { pickScreen } from './screen';
       }
       @case ('handover') {
         <app-handover-view />
+      }
+      @case ('army') {
+        <app-army-view />
+      }
+      @case ('deploy') {
+        <app-deploy-view />
       }
       @case ('battle') {
         <app-battle-view (leave)="leave.emit()" />

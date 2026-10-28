@@ -362,6 +362,14 @@ As SA §11, plus:
 **Phase 2 — Army and deploy (hot-seat).** Race picker, unit shop, gear slots, budget bar, deploy screen, handover curtain, local setup page.
 *Done when:* a 3-player hot-seat game runs from setup to result without anyone seeing another player's army.
 
+> **Done (2026-10-28).** `/local` sets up 2–4 names, the map (live SVG previews with the zones for the player count), budget, mode and an optional turn timer; the engine's own `startProblem` checks the player count. Army: race grid (hero portrait, trait, hero ability) → unit shop (portrait, tier, cost, stats, ability tags) with steppers and "макс", the hero's 9 slots with per-slot item lists, and a sticky budget bar (units / gear / remaining, the 30% cap marker, stacks and champions left). Deploy: the Pixi map with your zone, tap a stack then a cell, auto-placement, ready. The curtain comes before every army and deploy screen. Checked in the browser at 375×812: Іван, Олена and Марко on Arena bought three armies by hand (each screen started empty), deployed, fought to "Переміг Олена", and the rematch went back to the army with Іван's army kept (one tap to resubmit). Tests: the army draft (budget, two stacks of a type, the map's stack limit, champions per budget, the gear cap with scaled prices, agreement with `validateArmy`, loading a kept army).
+> Differences from the plan:
+> - Deploy is tap-to-place only (tap a stack, tap a cell; tap a placed stack to pick it up). No drag yet.
+> - Portraits in the shop are drawn with the 2D canvas straight from the atlas JSON and WebP (`ui/unit-portrait.ts`), not through Pixi: a still frame needs no WebGL context per card.
+> - Map previews are inline SVG (`mapSvg(…, { fluid: true })`) rather than a rasterised texture.
+> - "Швидкий бій (готові армії)" on the setup page keeps the Phase 1 quick start for testing.
+> - The local setup has no lobby: hot-seat starts straight at `army` (what `lobby.start` would do).
+
 **Phase 3 — Getting in (online).** Home, create (map picker with previews), join, identity — mostly copied from sen-reveal-app.
 *Done when:* create and join return tokens, and every error has a place on screen.
 

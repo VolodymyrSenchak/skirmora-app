@@ -6,6 +6,10 @@ export const routes: Routes = [
     loadComponent: () => import('./features/home/home.page').then((m) => m.HomePage),
   },
   {
+    path: 'local',
+    loadComponent: () => import('./features/local/local-setup.page').then((m) => m.LocalSetupPage),
+  },
+  {
     path: 'local/game',
     loadComponent: () => import('./features/local/local-game.page').then((m) => m.LocalGamePage),
   },

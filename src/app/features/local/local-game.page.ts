@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LocalSession } from '../../session/local-session';
 import { LocalTransport } from '../../session/local.transport';
@@ -6,7 +6,10 @@ import { SessionConnection } from '../../session/session-connection';
 import { SessionStore } from '../../session/session.store';
 import { SessionScreens } from '../session/session-screens';
 
-/** `/local/game`: the session screens over a `LocalTransport` (plan §6, §7). */
+/** Ready-made armies for the quick battle, by seat. */
+const QUICK_RACES = ['knights', 'barbarians', 'elves', 'demons'] as const;
+
+/** `/local/game`: the session screens over the saved `LocalTransport` (plan §6, §7). */
 @Component({
   selector: 'app-local-game-page',
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -18,20 +21,20 @@ export class LocalGamePage implements OnInit {
   private readonly session = inject(LocalSession);
   private readonly router = inject(Router);
 
+  /** `?quick=1`: skip the shop — ready-made armies and automatic deployment. */
+  readonly quick = input<string>();
+
   ngOnInit(): void {
     const saved = LocalTransport.restore();
-    if (saved) {
-      this.session.start(saved);
+    if (!saved) {
+      void this.router.navigateByUrl('/local');
       return;
     }
-    // Phase 1: no setup page yet — a quick 2-player battle with ready-made armies
-    const created = LocalTransport.create({ nicknames: ['Гравець 1', 'Гравець 2'], settings: { mapId: 'arena', budget: 1000 } });
-    if ('error' in created) {
-      void this.router.navigateByUrl('/');
-      return;
+    this.session.start(saved);
+    if (this.quick()) {
+      this.session.quickStart([...QUICK_RACES]);
+      void this.router.navigate([], { queryParams: {}, replaceUrl: true });
     }
-    this.session.start(created.transport);
-    this.session.quickStart(['knights', 'barbarians']);
   }
 
   leave(): void {

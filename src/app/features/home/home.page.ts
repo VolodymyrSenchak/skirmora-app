@@ -18,7 +18,7 @@ import { LocalTransport } from '../../session/local.transport';
         @if (hasLocal) {
           <a class="btn primary" routerLink="/local/game">Продовжити гру на одному телефоні</a>
         }
-        <a class="btn" [class.primary]="!hasLocal" routerLink="/local/game">Один телефон</a>
+        <a class="btn" [class.primary]="!hasLocal" routerLink="/local">Один телефон</a>
       </nav>
     </main>
   `,
