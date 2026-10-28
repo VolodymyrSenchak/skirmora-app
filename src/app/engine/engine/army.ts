@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 import { BALANCE, ITEMS, ItemId, SingleSlot, SLOTS } from "./data/items";
 import { RACES, UNITS, UnitId } from "./data/races";
 import { cellKey, cellIndex, BuiltMap } from "./grid";

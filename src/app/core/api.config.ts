@@ -1,7 +1,7 @@
 import { InjectionToken } from '@angular/core';
 
 export interface AppConfig {
-  /** Origin of pocket-legions-api, no trailing slash. HTTP and the socket share it. */
+  /** Origin of skirmora-api, no trailing slash. HTTP and the socket share it. */
   apiUrl: string;
 }
 

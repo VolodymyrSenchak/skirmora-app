@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 /**
  * Randomness source. Structurally the same as the server's `Rng` (utils/random.ts), so `ctx.rng`
  * passes straight in; the engine never creates randomness of its own.

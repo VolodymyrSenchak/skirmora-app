@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 import { clampLuckMorale, heroBonuses, HeroBonuses } from "./army";
 import type { AbilityId } from "./data/abilities";
 import { UNITS } from "./data/races";

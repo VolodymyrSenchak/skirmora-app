@@ -1,6 +1,6 @@
 import { MAPS } from '../engine/engine/data/maps';
 import { DATA_VERSION } from '../engine/engine/version';
-import { startProblem } from '../engine/game/pocketLegions.state';
+import { startProblem } from '../engine/game/skirmora.state';
 import type { GameMode, MapId } from '../models';
 
 /**

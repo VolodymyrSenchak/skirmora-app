@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 import type { z } from "zod";
 import type { ErrorCode, Result } from "../models/result";
 import type { PlayerRecord, SessionStatus } from "../models/session.model";

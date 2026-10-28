@@ -1,8 +1,8 @@
 import { DestroyRef, inject, Injectable, signal } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { getMap } from '../engine/engine/grid';
-import { GameAction, PocketLegionsView, TerminalReason } from '../models';
-import { PocketLegions } from './actions';
+import { GameAction, SkirmoraView, TerminalReason } from '../models';
+import { Skirmora } from './actions';
 import { LocalTransport } from './local.transport';
 import { autoDeployFor, presetArmy } from './local-presets';
 import { Handover, SessionConnection } from './session-connection';
@@ -73,17 +73,17 @@ export class LocalSession extends SessionConnection {
     if (!transport) return;
     for (let guard = 0; guard < 32; guard++) {
       transport.confirmHandover();
-      const game: PocketLegionsView = transport.view().game!;
+      const game: SkirmoraView = transport.view().game!;
       const seat = game.mySeat ?? 0;
       if (game.phase === 'army') {
         const raceId = races[seat % races.length];
-        if (game.seats[seat]?.raceId !== raceId) transport.dispatchSync(PocketLegions.pickRace(raceId));
+        if (game.seats[seat]?.raceId !== raceId) transport.dispatchSync(Skirmora.pickRace(raceId));
         const settings = transport.snapshot.settings;
         transport.dispatchSync(
-          PocketLegions.submitArmy(presetArmy(raceId, settings.budget, getMap(game.mapId).size, game.seats.length)),
+          Skirmora.submitArmy(presetArmy(raceId, settings.budget, getMap(game.mapId).size, game.seats.length)),
         );
       } else if (game.phase === 'deploy') {
-        transport.dispatchSync(PocketLegions.submitDeploy(autoDeployFor(game)));
+        transport.dispatchSync(Skirmora.submitDeploy(autoDeployFor(game)));
       } else {
         break;
       }

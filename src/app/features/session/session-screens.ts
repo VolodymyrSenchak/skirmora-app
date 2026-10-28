@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, computed, inject, output, signal } from '@angular/core';
 import { errorMessage } from '../../core/api-error';
 import type { GameAction } from '../../models';
-import { PocketLegions } from '../../session/actions';
+import { Skirmora } from '../../session/actions';
 import { SessionConnection } from '../../session/session-connection';
 import { SessionStore } from '../../session/session.store';
 import { ConnectionBannerComponent } from '../../ui/connection-banner';
@@ -82,7 +82,7 @@ export class SessionScreens {
 
   readonly screen = computed(() => pickScreen(this.store.view(), this.connection.terminal(), !!this.connection.handover()));
   protected readonly toast = signal<string | null>(null);
-  protected readonly rematch = PocketLegions.rematch;
+  protected readonly rematch = Skirmora.rematch;
   private toastTimer: ReturnType<typeof setTimeout> | null = null;
 
   /** A failed action leaves the store untouched: the next snapshot is the truth. Say little. */

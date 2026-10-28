@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 import type { AbilityId } from "./data/abilities";
 import type { ItemId, SingleSlot, Slot } from "./data/items";
 import type { MapId } from "./data/maps";

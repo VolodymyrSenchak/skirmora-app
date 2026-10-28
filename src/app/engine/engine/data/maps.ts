@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 // Ported from design/data/maps.js. Each map lists obstacles for part of the field; the symmetry
 // (grid.ts buildMap) adds the rest:
 //   rot4 — 90° rotation (fair for 4 players in the corners and 2 players left/right),

@@ -1,10 +1,10 @@
-// Copies the pure engine of pocket-legions-api into src/app/engine (plan §4).
+// Copies the pure engine of skirmora-api into src/app/engine (plan §4).
 //
 //   npm run sync:engine            copy
 //   npm run sync:engine -- --check fail if the copy differs from the API checkout
 //
 // The list of what to copy is the API's own `client-sync.json`, never hard-coded here.
-// The API checkout is `../pocket-legions-api` unless POCKET_LEGIONS_API points elsewhere.
+// The API checkout is `../skirmora-api` unless SKIRMORA_API points elsewhere.
 // Without a checkout (a Vercel build of this repo alone) `--check` warns and passes: the
 // committed copy is what gets built.
 import { execFileSync } from 'node:child_process';
@@ -13,7 +13,7 @@ import { dirname, join, posix, relative, resolve, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const apiDir = resolve(root, process.env.POCKET_LEGIONS_API ?? '../pocket-legions-api');
+const apiDir = resolve(root, process.env.SKIRMORA_API ?? '../skirmora-api');
 const outDir = join(root, 'src', 'app', 'engine');
 const check = process.argv.includes('--check');
 
@@ -43,7 +43,7 @@ sources.push(...manifest.files);
 sources.sort();
 
 const commit = sourceCommit(sources);
-const header = `// GENERATED from pocket-legions-api@${commit} — do not edit\n`;
+const header = `// GENERATED from skirmora-api@${commit} — do not edit\n`;
 const dataVersion = /DATA_VERSION\s*=\s*"([^"]+)"/.exec(readFileSync(join(apiDir, 'src/engine/version.ts'), 'utf8'))?.[1];
 if (!dataVersion) {
   console.error('sync-engine: DATA_VERSION not found in src/engine/version.ts');
@@ -71,12 +71,12 @@ if (check) {
     if (!expected.has(target)) problems.push(`extra ${target}`);
   }
   if (problems.length) {
-    console.error(`sync-engine --check: src/app/engine is out of date with pocket-legions-api@${commit}`);
+    console.error(`sync-engine --check: src/app/engine is out of date with skirmora-api@${commit}`);
     for (const problem of problems) console.error(`  ${problem}`);
-    console.error('Run `npm run sync:engine`. Rule changes belong in pocket-legions-api, not here.');
+    console.error('Run `npm run sync:engine`. Rule changes belong in skirmora-api, not here.');
     process.exit(1);
   }
-  console.log(`sync-engine --check: OK (${sources.length} files, pocket-legions-api@${commit}, data ${dataVersion})`);
+  console.log(`sync-engine --check: OK (${sources.length} files, skirmora-api@${commit}, data ${dataVersion})`);
   process.exit(0);
 }
 
@@ -88,7 +88,7 @@ for (const [target, content] of expected) {
   mkdirSync(dirname(file), { recursive: true });
   writeFileSync(file, content);
 }
-console.log(`sync-engine: copied ${sources.length} files from pocket-legions-api@${commit} (data ${dataVersion})`);
+console.log(`sync-engine: copied ${sources.length} files from skirmora-api@${commit} (data ${dataVersion})`);
 
 function walk(dir) {
   return readdirSync(dir).flatMap((name) => {

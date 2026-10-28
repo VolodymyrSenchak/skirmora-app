@@ -1,5 +1,5 @@
 import { ChangeDetectionStrategy, Component, input, model } from '@angular/core';
-import { BUDGETS } from '../../engine/game/pocketLegions.state';
+import { BUDGETS } from '../../engine/game/skirmora.state';
 import type { CreateSettings, GameMode } from '../../models';
 import { MapPicker } from '../../ui/map-picker';
 

@@ -1,13 +1,13 @@
 import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
 import { startProblemText } from '../../core/start-check';
-import { BUDGETS } from '../../engine/game/pocketLegions.state';
+import { BUDGETS } from '../../engine/game/skirmora.state';
 import type { GameMode, MapId } from '../../models';
 import { LocalTransport } from '../../session/local.transport';
 import { seatColor } from '../../ui/colors';
 import { MapPicker } from '../../ui/map-picker';
 
-const NAMES_KEY = 'pocket-legions:local-names';
+const NAMES_KEY = 'skirmora:local-names';
 const MAX_NAME = 20;
 
 /** `/local`: hot-seat setup — 2–4 names, map, budget, mode, the optional turn timer (plan §7). */

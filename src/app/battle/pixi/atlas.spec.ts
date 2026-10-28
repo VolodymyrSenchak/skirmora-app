@@ -15,7 +15,7 @@ import type { RaceArtMeta } from './atlas-loader';
 interface AtlasJson {
   frames: Record<string, unknown>;
   animations: Record<string, string[]>;
-  meta: { pocketLegions?: RaceArtMeta };
+  meta: { skirmora?: RaceArtMeta };
 }
 
 const ATLASES: Record<string, AtlasJson> = { knights, vampires, barbarians, elves, dwarves, demons };
@@ -37,7 +37,7 @@ describe('race atlases', () => {
           const frames = atlas.animations[`${unitId}/${anim}`];
           expect(frames?.length, `${unitId}/${anim}`).toBeGreaterThan(0);
           for (const frame of frames) expect(atlas.frames[frame], frame).toBeDefined();
-          expect(atlas.meta.pocketLegions?.units[unitId]?.anims[anim as 'idle'], `${unitId}/${anim} meta`).toBeDefined();
+          expect(atlas.meta.skirmora?.units[unitId]?.anims[anim as 'idle'], `${unitId}/${anim} meta`).toBeDefined();
         }
       }
     });
@@ -48,7 +48,7 @@ describe('race atlases', () => {
     });
 
     it(`${raceId}: every projectile named in the meta exists`, () => {
-      for (const unit of Object.values(atlas.meta.pocketLegions!.units)) {
+      for (const unit of Object.values(atlas.meta.skirmora!.units)) {
         const id = unit.anims.shoot?.projectile;
         if (id) expect((projectiles.animations as Record<string, string[]>)[`${id}/fly`], id).toBeDefined();
       }

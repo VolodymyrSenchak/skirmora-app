@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 import { ABILITY_IDS, AbilityId } from "./data/abilities";
 import { addStatus, applyDamage, applySkip, healStack, untilNextActivation } from "./effects";
 import { DIRECTIONS, distance, isAdjacent } from "./grid";

@@ -1,5 +1,5 @@
 /**
- * The session envelope, from the synced `models/session.model.ts` (plan §4). Pocket Legions is
+ * The session envelope, from the synced `models/session.model.ts` (plan §4). Skirmora is
  * the only game the API serves, so there is no `gameType` and the game view is typed.
  */
 import type {
@@ -10,15 +10,15 @@ import type {
   SessionView,
 } from '../engine/models/session.model';
 import type { ErrorCode as EngineErrorCode } from '../engine/models/result';
-import type { GameMode, MapId, PocketLegionsSettings, PocketLegionsView } from './pocket-legions.model';
+import type { GameMode, MapId, SkirmoraSettings, SkirmoraView } from './skirmora.model';
 
 export type { SessionPlayerView, SessionStatus };
 
 /** `settings` of a room: the core part plus the game's (contract §1). */
-export type RoomSettings = CoreSettings & PocketLegionsSettings;
+export type RoomSettings = CoreSettings & SkirmoraSettings;
 
 /** What the store holds: the API's `SessionView` with the settings and game typed. */
-export interface GameSession extends Omit<SessionView<PocketLegionsView>, 'settings'> {
+export interface GameSession extends Omit<SessionView<SkirmoraView>, 'settings'> {
   settings: RoomSettings;
 }
 
@@ -49,7 +49,7 @@ export interface JoinSessionBody {
   password?: string;
 }
 
-/** Wire shape of every action: `{ type: 'lobby.start' | 'pocket-legions.act' | …, payload }`. */
+/** Wire shape of every action: `{ type: 'lobby.start' | 'skirmora.act' | …, payload }`. */
 export interface GameAction {
   type: string;
   payload: object;

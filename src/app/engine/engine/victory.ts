@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 import { BattleCtx, BattleEndReason, BattleState, emit, isAlive, ROUND_LIMIT } from "./state";
 import { stackPoints } from "./stats";
 

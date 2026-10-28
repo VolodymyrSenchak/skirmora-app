@@ -10,7 +10,7 @@ import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = resolve(dirname(fileURLToPath(import.meta.url)), '..');
-const sourceDir = resolve(root, process.env.POCKET_LEGIONS_ART ?? '../design/art/atlas');
+const sourceDir = resolve(root, process.env.SKIRMORA_ART ?? '../design/art/atlas');
 const outDir = join(root, 'public', 'art', 'atlas');
 const check = process.argv.includes('--check');
 /** The README stays in design/; the game needs only the data and the pages. */

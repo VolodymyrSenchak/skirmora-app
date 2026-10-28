@@ -105,10 +105,10 @@ export class AtlasLoader {
     const metas: RaceArtMeta[] = [];
     for (const sheet of sheets) {
       Object.assign(animations, sheet.animations);
-      const pageMeta = (sheet.data.meta as { pocketLegions?: RaceArtMeta }).pocketLegions;
+      const pageMeta = (sheet.data.meta as { skirmora?: RaceArtMeta }).skirmora;
       if (pageMeta) metas.push(pageMeta);
     }
-    if (!metas.length) throw new Error(`Atlas ${raceId}: no meta.pocketLegions`);
+    if (!metas.length) throw new Error(`Atlas ${raceId}: no meta.skirmora`);
     const meta: RaceArtMeta = { ...metas[0], units: Object.assign({}, ...metas.map((page) => page.units)) };
     return { raceId, meta, animations };
   }

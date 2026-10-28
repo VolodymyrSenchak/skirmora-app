@@ -1,2 +1,2 @@
-export * from './pocket-legions.model';
+export * from './skirmora.model';
 export * from './session.model';

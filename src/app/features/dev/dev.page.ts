@@ -37,7 +37,7 @@ type ZoneMode = 'two' | 'four' | 'none';
   template: `
     <main class="wrap">
       <header>
-        <span class="eyebrow">Pocket Legions · dev</span>
+        <span class="eyebrow">Skirmora · dev</span>
         <h1>Атласи і карти</h1>
         <p class="muted">{{ summary() }}</p>
       </header>

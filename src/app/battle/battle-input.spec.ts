@@ -41,7 +41,7 @@ describe('BattleInput', () => {
   it('moves with one tap on a highlighted cell, ignores the rest', () => {
     const { input } = setup();
     expect(input.tap({ x: 9, y: 9 })).toBeNull();
-    expect(input.tap({ x: 2, y: 1 })).toEqual({ type: 'pocket-legions.act', payload: { stackId: 's0_0', kind: 'move', cell: { x: 2, y: 1 } } });
+    expect(input.tap({ x: 2, y: 1 })).toEqual({ type: 'skirmora.act', payload: { stackId: 's0_0', kind: 'move', cell: { x: 2, y: 1 } } });
   });
 
   it('never commits an attack with one tap', () => {
@@ -49,7 +49,7 @@ describe('BattleInput', () => {
     expect(input.tap({ x: 4, y: 1 })).toBeNull();
     expect(input.pending()).toMatchObject({ kind: 'attack', targetId: 's1_0', from: { x: 3, y: 1 } });
     expect(input.tap({ x: 4, y: 1 })).toEqual({
-      type: 'pocket-legions.act',
+      type: 'skirmora.act',
       payload: { stackId: 's0_0', kind: 'attack', target: 's1_0', cell: { x: 3, y: 1 } },
     });
     expect(input.pending()).toBeNull();
@@ -96,6 +96,6 @@ describe('BattleInput', () => {
     expect(input.heroReady()).toBe(false);
     input.tap({ x: 1, y: 3 });
     expect(input.heroReady()).toBe(true);
-    expect(input.tap({ x: 1, y: 3 })).toEqual({ type: 'pocket-legions.heroAbility', payload: { target: 's1_0', ally: 's0_1' } });
+    expect(input.tap({ x: 1, y: 3 })).toEqual({ type: 'skirmora.heroAbility', payload: { target: 's1_0', ally: 's0_1' } });
   });
 });

@@ -6,7 +6,7 @@ import { RACE_IDS, RACES, UNITS } from '../../../engine/engine/data/races';
 import { getMap } from '../../../engine/engine/grid';
 import type { ItemId, RaceId, SingleSlot, UnitId } from '../../../models';
 import type { ItemDef, UnitDef } from '../../../engine/engine/types';
-import { PocketLegions } from '../../../session/actions';
+import { Skirmora } from '../../../session/actions';
 import { SessionConnection } from '../../../session/session-connection';
 import { SessionStore } from '../../../session/session.store';
 import { RACE_COLORS, seatColor } from '../../../ui/colors';
@@ -98,15 +98,15 @@ export class ArmyView {
       return;
     }
     // a new race drops the army on the server too
-    void this.send(PocketLegions.pickRace(raceId)).then(() => this.choosingRace.set(false));
+    void this.send(Skirmora.pickRace(raceId)).then(() => this.choosingRace.set(false));
   }
 
   protected submit(): void {
-    void this.send(PocketLegions.submitArmy(this.draft.army()));
+    void this.send(Skirmora.submitArmy(this.draft.army()));
   }
 
   protected unready(): void {
-    void this.send(PocketLegions.unready());
+    void this.send(Skirmora.unready());
   }
 
   protected toggleSlot(key: SlotKey): void {

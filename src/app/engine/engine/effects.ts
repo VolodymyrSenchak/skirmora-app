@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 import { BattleCtx, emit, isAlive, setStatus, StackState, Status, StatusId } from "./state";
 import { totalHp, unitOf } from "./stats";
 

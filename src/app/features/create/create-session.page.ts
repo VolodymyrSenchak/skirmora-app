@@ -7,7 +7,7 @@ import { SessionApiService } from '../../core/session-api.service';
 import { CreateSettings, NICKNAME_MAX_LENGTH, PASSWORD_MAX_LENGTH } from '../../models';
 import { DEFAULT_ROOM_SETTINGS, RoomSettingsForm } from './room-settings.form';
 
-const SETTINGS_KEY = 'pocket-legions:create-settings';
+const SETTINGS_KEY = 'skirmora:create-settings';
 
 /** `/create`: settings, nickname, optional password → `POST /api/sessions` → `/s/:code` (plan §7). */
 @Component({

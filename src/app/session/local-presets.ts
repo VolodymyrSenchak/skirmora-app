@@ -1,7 +1,7 @@
 import { validateArmy } from '../engine/engine/army';
 import { RACES, UNITS } from '../engine/engine/data/races';
 import { cellIndex, getMap } from '../engine/engine/grid';
-import type { Army, Cell, MapId, Placement, PocketLegionsView, RaceId } from '../models';
+import type { Army, Cell, MapId, Placement, SkirmoraView, RaceId } from '../models';
 
 /** Tiers of the ready-made army: one shooter at least in every race, no champion. */
 const PRESET_TIERS = [1, 2, 3, 5, 7];
@@ -45,7 +45,7 @@ export function autoDeploy(mapId: MapId, zone: readonly Cell[], stackCount: numb
 }
 
 /** Auto-deploy straight from a deploy-phase view. */
-export function autoDeployFor(view: PocketLegionsView): Placement[] {
+export function autoDeployFor(view: SkirmoraView): Placement[] {
   const mine = view.mine;
   if (!mine?.zone || !mine.army) return [];
   return autoDeploy(view.mapId, mine.zone, mine.army.stacks.length);

@@ -1,6 +1,6 @@
 import { computed, signal, Signal } from '@angular/core';
 import type { Cell, GameAction, Hints, Preview, StackHints, StackView } from '../models';
-import { PocketLegions } from '../session/actions';
+import { Skirmora } from '../session/actions';
 import type { Highlight } from './battle-renderer';
 
 export type InputMode = 'act' | 'ability' | 'hero';
@@ -135,18 +135,18 @@ export class BattleInput {
     if (!pending) return null;
     switch (pending.kind) {
       case 'attack':
-        return this.commit(PocketLegions.act({ stackId: selected!.stackId, kind: 'attack', target: pending.targetId, cell: pending.from }));
+        return this.commit(Skirmora.act({ stackId: selected!.stackId, kind: 'attack', target: pending.targetId, cell: pending.from }));
       case 'shoot':
-        return this.commit(PocketLegions.act({ stackId: selected!.stackId, kind: 'shoot', target: pending.targetId }));
+        return this.commit(Skirmora.act({ stackId: selected!.stackId, kind: 'shoot', target: pending.targetId }));
       case 'ability':
         return this.commit(
-          PocketLegions.act({ stackId: selected!.stackId, kind: 'ability', ...(pending.targetId ? { target: pending.targetId } : {}) }),
+          Skirmora.act({ stackId: selected!.stackId, kind: 'ability', ...(pending.targetId ? { target: pending.targetId } : {}) }),
         );
       case 'hero': {
         const hero = this.heroHints();
         if (!hero || !this.heroReady(pending)) return null;
         const { target, ally, cell, cells } = pending;
-        return this.commit(PocketLegions.heroAbility({ ...(target ? { target } : {}), ...(ally ? { ally } : {}), ...(cell ? { cell } : {}), ...(cells ? { cells } : {}) }));
+        return this.commit(Skirmora.heroAbility({ ...(target ? { target } : {}), ...(ally ? { ally } : {}), ...(cell ? { cell } : {}), ...(cells ? { cells } : {}) }));
       }
     }
   }
@@ -162,7 +162,7 @@ export class BattleInput {
 
   defend(): GameAction | null {
     const selected = this.selected();
-    return selected?.canDefend ? this.commit(PocketLegions.act({ stackId: selected.stackId, kind: 'defend' })) : null;
+    return selected?.canDefend ? this.commit(Skirmora.act({ stackId: selected.stackId, kind: 'defend' })) : null;
   }
 
   /** A tap on a cell. Returns the action to send, if the tap committed one. */
@@ -212,7 +212,7 @@ export class BattleInput {
       }
     }
     if (has(selected.moves, cell)) {
-      return this.commit(PocketLegions.act({ stackId: selected.stackId, kind: 'move', cell }));
+      return this.commit(Skirmora.act({ stackId: selected.stackId, kind: 'move', cell }));
     }
     this.pending.set(null);
     return null;

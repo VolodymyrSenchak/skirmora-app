@@ -1,8 +1,8 @@
 import { describe, expect, it } from 'vitest';
 import { createSeededRng } from '../core/rng';
 import type { Rng } from '../engine/engine/rng';
-import type { PocketLegionsView } from '../models';
-import { PocketLegions } from './actions';
+import type { SkirmoraView } from '../models';
+import { Skirmora } from './actions';
 import { LOCAL_STORAGE_KEY, LocalTransport } from './local.transport';
 import { autoDeployFor, presetArmy } from './local-presets';
 
@@ -38,7 +38,7 @@ function newGame(nicknames: string[], storage: Storage | null = null, rng: Rng =
   return created.transport;
 }
 
-function game(transport: LocalTransport): PocketLegionsView {
+function game(transport: LocalTransport): SkirmoraView {
   return transport.view().game!;
 }
 
@@ -49,28 +49,28 @@ function playToBattle(transport: LocalTransport, races = ['knights', 'barbarians
     const view = game(transport);
     const seat = view.mySeat!;
     if (view.phase === 'army') {
-      expect(transport.dispatchSync(PocketLegions.pickRace(races[seat])).ok).toBe(true);
+      expect(transport.dispatchSync(Skirmora.pickRace(races[seat])).ok).toBe(true);
       const army = presetArmy(races[seat], 1000, 10, view.seats.length);
-      expect(transport.dispatchSync(PocketLegions.submitArmy(army)).ok).toBe(true);
+      expect(transport.dispatchSync(Skirmora.submitArmy(army)).ok).toBe(true);
     } else {
-      expect(transport.dispatchSync(PocketLegions.submitDeploy(autoDeployFor(view))).ok).toBe(true);
+      expect(transport.dispatchSync(Skirmora.submitDeploy(autoDeployFor(view))).ok).toBe(true);
     }
   }
 }
 
 /** One legal move from the hints, picked by `rng`: what a tap can send. */
-function randomHintAction(view: PocketLegionsView, rng: Rng) {
+function randomHintAction(view: SkirmoraView, rng: Rng) {
   const hints = view.hints!;
   const stack = rng.pick(hints.stacks);
   const options = [
-    ...stack.attacks.map((attack) => PocketLegions.act({ stackId: stack.stackId, kind: 'attack', target: attack.targetId, cell: rng.pick(attack.from) })),
-    ...stack.shots.map((shot) => PocketLegions.act({ stackId: stack.stackId, kind: 'shoot', target: shot.targetId })),
-    ...stack.moves.map((cell) => PocketLegions.act({ stackId: stack.stackId, kind: 'move', cell })),
+    ...stack.attacks.map((attack) => Skirmora.act({ stackId: stack.stackId, kind: 'attack', target: attack.targetId, cell: rng.pick(attack.from) })),
+    ...stack.shots.map((shot) => Skirmora.act({ stackId: stack.stackId, kind: 'shoot', target: shot.targetId })),
+    ...stack.moves.map((cell) => Skirmora.act({ stackId: stack.stackId, kind: 'move', cell })),
   ];
   // prefer fighting, so the battle ends before the round limit most of the time
   const fights = options.slice(0, stack.attacks.length + stack.shots.length);
   if (fights.length && rng.int(4) > 0) return rng.pick(fights);
-  return options.length ? rng.pick(options) : PocketLegions.act({ stackId: stack.stackId, kind: 'defend' });
+  return options.length ? rng.pick(options) : Skirmora.act({ stackId: stack.stackId, kind: 'defend' });
 }
 
 describe('LocalTransport', () => {
@@ -107,8 +107,8 @@ describe('LocalTransport', () => {
       expect(view.mySeat).toBe(seat);
       // nobody else's army is in this view
       expect(view.mine?.army).toBeNull();
-      transport.dispatchSync(PocketLegions.pickRace(raceId));
-      transport.dispatchSync(PocketLegions.submitArmy(presetArmy(raceId, 1000, 10, 3)));
+      transport.dispatchSync(Skirmora.pickRace(raceId));
+      transport.dispatchSync(Skirmora.submitArmy(presetArmy(raceId, 1000, 10, 3)));
     }
     expect(game(transport).phase).toBe('deploy');
     for (let seat = 0; seat < 3; seat++) {
@@ -116,7 +116,7 @@ describe('LocalTransport', () => {
       transport.confirmHandover();
       const view = game(transport);
       expect(view.mine?.deployment).toBeNull();
-      transport.dispatchSync(PocketLegions.submitDeploy(autoDeployFor(view)));
+      transport.dispatchSync(Skirmora.submitDeploy(autoDeployFor(view)));
     }
     expect(game(transport).phase).toBe('battle');
     // the battle is public: no curtain, the active seat holds the phone
@@ -147,7 +147,7 @@ describe('LocalTransport', () => {
     playToBattle(transport);
     const view = game(transport);
     const enemy = view.battle!.stacks.find((stack) => stack.seat !== view.mySeat)!;
-    const result = transport.dispatchSync(PocketLegions.act({ stackId: enemy.id, kind: 'defend' }));
+    const result = transport.dispatchSync(Skirmora.act({ stackId: enemy.id, kind: 'defend' }));
     expect(result.ok).toBe(false);
     expect(!result.ok && result.error.code).toBe('illegal-action');
     expect(transport.dispatchSync({ type: 'lobby.start', payload: {} }).ok).toBe(false);

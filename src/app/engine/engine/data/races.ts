@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 // Ported from design/data/gamedata.js. Unit costs come from design/generated/units.json
 // (the formula in balance.ts must reproduce them; see balance.test.ts).
 import type { HeroDef, RaceDef, UnitDef } from "../types";

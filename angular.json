@@ -6,7 +6,7 @@
   },
   "newProjectRoot": "projects",
   "projects": {
-    "pocket-legions-app": {
+    "skirmora-app": {
       "projectType": "application",
       "schematics": {
         "@schematics/angular:component": {
@@ -71,10 +71,10 @@
           "builder": "@angular/build:dev-server",
           "configurations": {
             "production": {
-              "buildTarget": "pocket-legions-app:build:production"
+              "buildTarget": "skirmora-app:build:production"
             },
             "development": {
-              "buildTarget": "pocket-legions-app:build:development"
+              "buildTarget": "skirmora-app:build:development"
             }
           },
           "defaultConfiguration": "development"

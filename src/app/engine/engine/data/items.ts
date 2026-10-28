@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 // Ported from design/data/gamedata.js. Unit costs come from design/generated/units.json
 import type { ItemDef } from "../types";
 

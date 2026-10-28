@@ -2,8 +2,8 @@ import { signal } from '@angular/core';
 import { Subject } from 'rxjs';
 import type { Rng } from '../engine/engine/rng';
 import { DATA_VERSION } from '../engine/engine/version';
-import { pocketLegionsModule } from '../engine/game/pocketLegions.module';
-import type { PocketLegionsState } from '../engine/game/pocketLegions.state';
+import { skirmoraModule } from '../engine/game/skirmora.module';
+import type { SkirmoraState } from '../engine/game/skirmora.state';
 import type { PlayerRecord } from '../engine/models/session.model';
 import { cryptoRng } from '../core/rng';
 import { ApiError, CreateSettings, GameAction, GameSession, RoomSettings, TerminalReason } from '../models';
@@ -12,7 +12,7 @@ import type { Handover } from './session-connection';
 import { ActionResult, ConnectionState, SessionTransport } from './session.transport';
 
 export const LOCAL_CODE = 'local';
-export const LOCAL_STORAGE_KEY = 'pocket-legions:local-game';
+export const LOCAL_STORAGE_KEY = 'skirmora:local-game';
 
 /** Everything a hot-seat game is; saved after every action so a reload resumes it (plan §6). */
 export interface LocalGame {
@@ -20,7 +20,7 @@ export interface LocalGame {
   version: number;
   players: PlayerRecord[];
   settings: RoomSettings;
-  state: PocketLegionsState;
+  state: SkirmoraState;
   /** Whose view the device shows. */
   viewerId: string;
   /** The curtain is up until `viewerId` taps it. */
@@ -86,14 +86,14 @@ export class LocalTransport implements SessionTransport {
       status: 'active',
     }));
     // `dataVersion` is the module's to set; the schema wants the key present
-    const parsed = pocketLegionsModule.settingsSchema.safeParse({ ...setup.settings, dataVersion: DATA_VERSION });
+    const parsed = skirmoraModule.settingsSchema.safeParse({ ...setup.settings, dataVersion: DATA_VERSION });
     if (!parsed.success) return { error: { code: 'bad-request', message: parsed.error.message } };
     const settings: RoomSettings = {
       ...parsed.data,
       maxPlayers: setup.settings.maxPlayers ?? 4,
       allowJoinInProgress: false,
     };
-    const initial = pocketLegionsModule.createInitialState({
+    const initial = skirmoraModule.createInitialState({
       actorId: players[0].id,
       hostPlayerId: players[0].id,
       activePlayers: players,
@@ -179,7 +179,7 @@ export class LocalTransport implements SessionTransport {
       return fail({ code: 'bad-request', message: `${action.type} is not available in hot-seat` });
     }
     const name = action.type.slice(GAME_PREFIX.length);
-    const handler = Object.hasOwn(pocketLegionsModule.actions, name) ? pocketLegionsModule.actions[name] : undefined;
+    const handler = Object.hasOwn(skirmoraModule.actions, name) ? skirmoraModule.actions[name] : undefined;
     if (!handler) return fail({ code: 'bad-request', message: `Unknown action ${action.type}` });
     const parsed = handler.schema.safeParse(action.payload);
     if (!parsed.success) return fail({ code: 'bad-request', message: parsed.error.message });
@@ -221,7 +221,7 @@ export class LocalTransport implements SessionTransport {
       })),
       settings: { ...game.settings },
       poll: { intervalMs: 0 },
-      game: pocketLegionsModule.project(game.state, viewer.id, this.ctx(viewer.id)),
+      game: skirmoraModule.project(game.state, viewer.id, this.ctx(viewer.id)),
     };
   }
 
@@ -264,7 +264,7 @@ export class LocalTransport implements SessionTransport {
  * Who holds the phone next (plan §6): army and deploy go seat by seat in seat order,
  * the battle follows the active seat, the result stays with whoever saw the end.
  */
-export function nextViewer(state: PocketLegionsState, current: string): string {
+export function nextViewer(state: SkirmoraState, current: string): string {
   const bySeat = [...state.seats].sort((a, b) => a.seat - b.seat);
   switch (state.phase) {
     case 'army':
@@ -279,7 +279,7 @@ export function nextViewer(state: PocketLegionsState, current: string): string {
 }
 
 /** Army and deployment are secret until the battle starts. */
-function isPrivatePhase(state: PocketLegionsState): boolean {
+function isPrivatePhase(state: SkirmoraState): boolean {
   return state.phase === 'army' || state.phase === 'deploy';
 }
 

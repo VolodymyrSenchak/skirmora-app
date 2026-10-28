@@ -20,14 +20,14 @@ import { BattleInput } from '../../../battle/battle-input';
 import { EventAnimator } from '../../../battle/event-animator';
 import { PixiBattleRenderer } from '../../../battle/pixi/pixi-battle-renderer';
 import type { GameAction, StackView } from '../../../models';
-import { PocketLegions } from '../../../session/actions';
+import { Skirmora } from '../../../session/actions';
 import { SessionConnection } from '../../../session/session-connection';
 import { SessionStore } from '../../../session/session.store';
 import { seatColor } from '../../../ui/colors';
 import { abilityName, eventLine, plural, range, STATUS_NAMES, unitName } from '../../../ui/copy';
 import { ResultPanel } from '../over/result.panel';
 
-const SPEED_KEY = 'pocket-legions:speed';
+const SPEED_KEY = 'skirmora:speed';
 const LOG_LINES = 5;
 const TOAST_MS = 3000;
 /** Plan §10: claim once the local clock passes the deadline by a second. */
@@ -426,7 +426,7 @@ export class BattleView {
       if (this.connection.local || ms === null || deadline === null) return;
       if (ms < -CLAIM_GRACE_MS && this.claimedDeadline !== deadline) {
         this.claimedDeadline = deadline;
-        untracked(() => void this.connection.dispatch(PocketLegions.claimTimeout()));
+        untracked(() => void this.connection.dispatch(Skirmora.claimTimeout()));
       }
     });
 
@@ -498,15 +498,15 @@ export class BattleView {
   protected surrender(): void {
     this.menuOpen.set(false);
     this.confirmSurrender.set(false);
-    void this.send(PocketLegions.surrender());
+    void this.send(Skirmora.surrender());
   }
 
   protected claimTimeout(): void {
-    void this.send(PocketLegions.claimTimeout());
+    void this.send(Skirmora.claimTimeout());
   }
 
   protected rematch(): void {
-    void this.send(PocketLegions.rematch());
+    void this.send(Skirmora.rematch());
   }
 
   private showToast(text: string): void {

@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 import { isMagicImmune } from "./abilities";
 import { addStatus, applyDamage, healStack, untilNextActivation } from "./effects";
 import { BuiltMap, distance, sameCell } from "./grid";

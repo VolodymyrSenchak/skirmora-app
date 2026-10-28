@@ -7,8 +7,8 @@ export interface PlayerIdentity {
   nickname: string;
 }
 
-const PREFIX = 'pocket-legions:player:';
-const LAST_NICKNAME = 'pocket-legions:nickname';
+const PREFIX = 'skirmora:player:';
+const LAST_NICKNAME = 'skirmora:nickname';
 
 /**
  * The token is the whole identity: no accounts, no refresh, no reclaim.

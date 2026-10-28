@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { RACES } from '../../engine/engine/data/races';
-import { PocketLegions } from '../../session/actions';
+import { Skirmora } from '../../session/actions';
 import { SessionConnection } from '../../session/session-connection';
 import { SessionStore } from '../../session/session.store';
 import { seatColor } from '../../ui/colors';
@@ -72,6 +72,6 @@ export class SeatsBar {
   });
 
   protected toggleTeam(playerId: string, team: 0 | 1 | null): void {
-    void this.connection.dispatch(PocketLegions.setTeam(playerId, team === 0 ? 1 : 0));
+    void this.connection.dispatch(Skirmora.setTeam(playerId, team === 0 ? 1 : 0));
   }
 }

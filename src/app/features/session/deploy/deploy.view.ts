@@ -17,7 +17,7 @@ import { cellIndex, getMap } from '../../../engine/engine/grid';
 import type { Highlight } from '../../../battle/battle-renderer';
 import { PixiBattleRenderer } from '../../../battle/pixi/pixi-battle-renderer';
 import type { Cell, Placement, StackView, UnitId } from '../../../models';
-import { PocketLegions } from '../../../session/actions';
+import { Skirmora } from '../../../session/actions';
 import { autoDeploy } from '../../../session/local-presets';
 import { SessionConnection } from '../../../session/session-connection';
 import { SessionStore } from '../../../session/session.store';
@@ -253,11 +253,11 @@ export class DeployView {
   }
 
   protected async submit(): Promise<void> {
-    await this.send(PocketLegions.submitDeploy(this.placements()));
+    await this.send(Skirmora.submitDeploy(this.placements()));
   }
 
   protected async unready(): Promise<void> {
-    await this.send(PocketLegions.unready());
+    await this.send(Skirmora.unready());
   }
 
   private async send(action: Parameters<SessionConnection['dispatch']>[0]): Promise<void> {

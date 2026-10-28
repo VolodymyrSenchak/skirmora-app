@@ -1,9 +1,9 @@
 import { describe, expect, it } from 'vitest';
-import type { GameSession, PocketLegionsView } from '../../models';
+import type { GameSession, SkirmoraView } from '../../models';
 import { pickScreen } from './screen';
 
-const view = (status: GameSession['status'], game: Partial<PocketLegionsView> | null): GameSession =>
-  ({ status, game: game as PocketLegionsView | null }) as GameSession;
+const view = (status: GameSession['status'], game: Partial<SkirmoraView> | null): GameSession =>
+  ({ status, game: game as SkirmoraView | null }) as GameSession;
 
 describe('pickScreen', () => {
   it.each([

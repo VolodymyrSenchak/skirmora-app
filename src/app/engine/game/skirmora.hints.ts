@@ -1,4 +1,4 @@
-// GENERATED from pocket-legions-api@1cf8cd0 — do not edit
+// GENERATED from skirmora-api@c63e491 — do not edit
 import { stackOptions } from "../engine/battle";
 import { preview, Preview, ShotPenalty } from "../engine/damage";
 import { getMap } from "../engine/grid";

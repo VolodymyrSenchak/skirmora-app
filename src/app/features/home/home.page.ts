@@ -11,7 +11,7 @@ import { LocalTransport } from '../../session/local.transport';
     <main class="shell home">
       <header>
         <span class="eyebrow">Покрокова тактика · 2–4 гравці</span>
-        <h1>Pocket Legions</h1>
+        <h1>Skirmora</h1>
         <p class="muted">Шість рас, герої зі спорядженням і бої на картах від 10×10 до 20×20.</p>
       </header>
       <nav class="actions">

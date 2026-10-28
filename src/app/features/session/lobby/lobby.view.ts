@@ -168,7 +168,7 @@ export class LobbyView {
     const url = this.link();
     try {
       if (navigator.share) {
-        await navigator.share({ title: 'Pocket Legions', text: `Код кімнати: ${this.store.code()}`, url });
+        await navigator.share({ title: 'Skirmora', text: `Код кімнати: ${this.store.code()}`, url });
         return;
       }
       await navigator.clipboard.writeText(url);
